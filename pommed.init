@@ -11,13 +11,13 @@
 RETVAL=0
 
 start() {
-	msg_starting "Pommed: "
+	msg_starting "Pommed"
 	daemon /usr/sbin/pommed
 	touch /var/lock/subsys/pommed
 }
 
 stop() {
-	msg_stopping "Pommed: "
+	msg_stopping "Pommed"
 	killproc pommed
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/pommed
