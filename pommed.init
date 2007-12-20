@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+# chkconfig: 2345 88 12
+
+# We can't run without acpi:
+[ -e /proc/acpi ] || exit
+
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+
+start() {
+	msg_starting "Pommed: "
+	daemon /usr/sbin/pommed
+	touch /var/lock/subsys/pommed
+}
+
+stop() {
+	msg_stopping "Pommed: "
+	killproc pommed
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/pommed
+}
+
+dostatus() {
+	status pommed
+	RETVAL=$?
+}
+
+restart() {
+	stop
+	start
+	RETVAL=$?
+}
+
+condrestart() {
+	[ -e /var/lock/subsys/pommed ] && restart || :
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	dostatus
+	;;
+  restart|reload)
+	restart
+	;;
+  condrestart)
+	condrestart
+	;;
+  *)
+	msg_usage "$0 {start|stop|status|restart|reload|condrestart}"
+	exit 1
+esac
+
+exit $RETVAL
