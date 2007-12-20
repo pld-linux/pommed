@@ -12,7 +12,7 @@
 . /etc/rc.d/init.d/functions
 
 # We can't run without acpi:
-[ -e /proc/acpi ] || exit
+[ -e /proc/acpi ] || exit 1
 
 start() {
 	# Check if the service is already running?
@@ -48,6 +48,16 @@ reload() {
 	fi
 }
 
+condrestart() {
+	if [ -f /var/lock/subsys/pommed ]; then
+		stop
+		start
+	else
+		msg_not_running pommed
+		RETVAL=$1
+	fi
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -61,20 +71,18 @@ case "$1" in
 	stop
 	start
 	;;
-  reload)
-  	reload
+  try-restart)
+	condrestart 0
 	;;
-# ONLY if program allows reloading without stopping
-# otherwise include force-reload with 'reload'
-  force-reload)
-	reload
+  reload|force-reload)
+  	reload
 	;;
   status)
 	status pommed
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
