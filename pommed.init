@@ -1,63 +1,81 @@
 #!/bin/sh
 #
-# chkconfig: 2345 88 12
+# pommed	pommed
+#
+# chkconfig:	345 88 12
+#
+# description:	pommed
+#
+# $Id$
+
+# Source function library
+. /etc/rc.d/init.d/functions
 
 # We can't run without acpi:
 [ -e /proc/acpi ] || exit
 
-# Source function library.
-. /etc/init.d/functions
-
-RETVAL=0
-
 start() {
-	msg_starting "Pommed"
-	daemon /usr/sbin/pommed
-	touch /var/lock/subsys/pommed
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/pommed ]; then
+		msg_starting pommed
+		daemon pommed
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pommed
+	else
+		msg_already_running pommed
+	fi
 }
 
 stop() {
-	msg_stopping "Pommed"
-	killproc pommed
-	RETVAL=$?
-	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/pommed
+	if [ -f /var/lock/subsys/pommed ]; then
+		# Stop daemons.
+		msg_stopping pommed
+		killproc pommed
+		rm -f /var/lock/subsys/pommed
+	else
+		msg_not_running pommed
+	fi
 }
 
-dostatus() {
-	status pommed
-	RETVAL=$?
+reload() {
+	if [ -f /var/lock/subsys/pommed ]; then
+		msg_reloading pommed
+		killproc pommed -HUP
+		RETVAL=$?
+	else
+		msg_not_running pommed
+		RETVAL=7
+	fi
 }
 
-restart() {
-	stop
-	start
-	RETVAL=$?
-}
-
-condrestart() {
-	[ -e /var/lock/subsys/pommed ] && restart || :
-}
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	start
+  	start
 	;;
   stop)
+  	stop
+	;;
+  restart)
 	stop
+	start
+	;;
+  reload)
+  	reload
+	;;
+# ONLY if program allows reloading without stopping
+# otherwise include force-reload with 'reload'
+  force-reload)
+	reload
 	;;
   status)
-	dostatus
-	;;
-  restart|reload)
-	restart
-	;;
-  condrestart)
-	condrestart
+	status pommed
+	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|status|restart|reload|condrestart}"
-	exit 1
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
 esac
 
 exit $RETVAL
