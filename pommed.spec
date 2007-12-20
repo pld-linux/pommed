@@ -25,6 +25,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	alsa-lib
 Requires:	eject
 Requires:	pomme-client
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
