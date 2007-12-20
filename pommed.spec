@@ -3,7 +3,7 @@ Summary:	pommed
 Summary(pl.UTF-8):	pommed
 Name:		pommed
 Version:	1.14
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.gz
@@ -25,11 +25,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_datadir}/gpomme/themes}
 
-install pommed/pommed $RPM_BUILD_ROOT/%{_sbindir}
-install gpomme/gpomme $RPM_BUILD_ROOT/%{_bindir}
-install wmpomme/wmpomme $RPM_BUILD_ROOT/%{_bindir}
+install pommed/pommed $RPM_BUILD_ROOT%{_sbindir}
+install gpomme/gpomme $RPM_BUILD_ROOT%{_bindir}
+install wmpomme/wmpomme $RPM_BUILD_ROOT%{_bindir}
+cp -R gpomme/themes/* $RPM_BUILD_ROOT%{_datadir}/gpomme/themes
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -39,3 +40,4 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS README TODO
 %attr(755,root,root) %{_bindir}/*pomme
 %attr(755,root,root) %{_sbindir}/pommed
+%{_datadir}/gpomme
