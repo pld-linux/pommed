@@ -5,7 +5,7 @@ Summary:	pommed
 Summary(pl.UTF-8):	pommed
 Name:		pommed
 Version:	1.14
-Release:	0.4
+Release:	0.5
 License:	GPL v2
 Group:		Applications
 Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.gz
