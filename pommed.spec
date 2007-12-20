@@ -5,11 +5,12 @@ Summary:	pommed
 Summary(pl.UTF-8):	pommed
 Name:		pommed
 Version:	1.14
-Release:	0.3
+Release:	0.4
 License:	GPL v2
 Group:		Applications
 Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.gz
 # Source0-md5:	1b54269bbadb6b43bd9e45566dd1b6ef
+Source1:	%{name}.init
 URL:		http://www.technologeek.org/projects/pommed/
 BuildRequires:	dbus-devel
 BuildRequires:	libconfuse-devel
@@ -60,11 +61,14 @@ Provides:	pomme-client
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_datadir}/%{name},%{_sysconfdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_datadir}/%{name},%{_sysconfdir}/dbus-1/system.d}
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
 
 install pommed/pommed $RPM_BUILD_ROOT%{_sbindir}
 install pommed/data/* $RPM_BUILD_ROOT%{_datadir}/%{name}
 install pommed.conf.{mactel,pmac} $RPM_BUILD_ROOT%{_sysconfdir}
+install dbus-policy.conf $RPM_BUILD_ROOT%{_sysconfdir}/dbus-1/system.d/pommed.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/pommed
 %if %{with gpomme}
 install -d $RPM_BUILD_ROOT{%{_datadir}/gpomme/themes,%{_desktopdir}}
 install gpomme/gpomme $RPM_BUILD_ROOT%{_bindir}
@@ -77,12 +81,24 @@ install wmpomme/wmpomme $RPM_BUILD_ROOT%{_bindir}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+/sbin/chkconfig --add %{name}
+%service pommed restart
+
+%preun
+if [ "$1" = "0" ]; then
+%service pommed stop
+/sbin/chkconfig --del %{name}
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS README TODO
 %attr(755,root,root) %{_sbindir}/pommed
 %{_datadir}/%{name}
 %{_sysconfdir}/pommed.conf.*
+%{_sysconfdir}/dbus-1/system.d/pommed.conf
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/pommed
 
 %if %{with gpomme}
 %files -n gpomme
