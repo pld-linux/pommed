@@ -1,8 +1,10 @@
+# TODO: optflags
+#
 # Conditional build
 %bcond_without	gpomme	# don't build gpomme client
-
-Summary:	pommed
-Summary(pl.UTF-8):	pommed
+#
+Summary:	pommed - Apple laptops hotkeys event handler
+Summary(pl.UTF-8):	pommed - obsługa zdarzeń klawiszy specjalnych w laptopach Apple'a
 Name:		pommed
 Version:	1.14
 Release:	0.5
@@ -29,30 +31,56 @@ Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
+pommed is a daemon handling the hotkeys found on the Apple laptops,
+like the MacBook Pro, MacBook and PowerBook laptops. These hotkeys
+control, through pommed, the LCD backlight level, the audio volume,
+the keyboard backlight level (only on the MacBook Pro and the latest
+PowerBook) and the CD/DVD drive ejection. Additionally, pommed
+monitors the ambient light sensors found on the MacBook Pro and the
+latest PowerBook to automatically light up the keyboard backlight when
+the ambient light level gets too low.
 
 %description -l pl.UTF-8
+pommed to demon obsługujący klawisze specjalne w laptopach Apple'a,
+takich jak MacBook Pro, MacBook i PowerBook. Klawisze te poprzez
+pommeda sterują poziomem podświetlenia LCD, głośnością dźwięku,
+poziomem podświetlenia klawiatury (tylko w MacBooku Pro i najnowszych
+PowerBookach) oraz wysuwaniem napędu CD/DVD. Ponadto pommed monitoruje
+czujnik światła zewnętrznego w MacBookach Pro i najnowszych
+PowerBookach w celu automatycznego podświetlania klawiatury kiedy
+światło zewnętrzne jest zbyt słabe.
 
 %package -n gpomme
-Summary:	gpomme
-Summary(pl.UTF-8):	gpomme
+Summary:	gpomme - GTK+ graphical client for use with pommed
+Summary(pl.UTF-8):	gpomme - graficzny klient GTK+ dla pommeda
 Group:		X11/Applications
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Provides:	pomme-client
 
 %description -n gpomme
+gpomme will react to signals sent by pommed over DBus when a key is
+pressed, displaying the action taken by pommed and the current state
+associated with this action.
 
 %description -n gpomme -l pl.UTF-8
+gpomme reaguje na sygnały wysyłane przez pommeda poprzez DBus przy
+naciśnięciu klawisza, wyświetlając podejmowaną akcję i aktualny stan
+związany z tą akcją.
 
 %package -n wmpomme
-Summary:	wmpomme
-Summary(pl.UTF-8):	wmpomme
+Summary:	wmpomme - WindowMaker dockapp for use with pommed
+Summary(pl.UTF-8):	wmpomme - aplet doku WindowMakera dla pommeda
 Group:		X11/Applications
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 Provides:	pomme-client
 
 %description -n wmpomme
+wmpomme displays, as a WindowMaker dockapp, the state of the devices
+controlled by pommed.
 
 %description -n wmpomme -l pl.UTF-8
+wmpomme wyświetla w postaci apletu doku WindowMakera stan urządzeń
+sterowanych przez pommeda.
 
 %prep
 %setup -q
