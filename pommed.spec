@@ -13,6 +13,7 @@ Group:		Applications
 Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.gz
 # Source0-md5:	1b54269bbadb6b43bd9e45566dd1b6ef
 Source1:	%{name}.init
+Patch0:		%{name}-libs.patch
 URL:		http://www.technologeek.org/projects/pommed/
 BuildRequires:	audiofile-devel
 BuildRequires:	dbus-devel
@@ -25,6 +26,7 @@ BuildRequires:	rpmbuild(macros) >= 1.228
 BuildRequires:	gtk+2-devel
 BuildRequires:	libglade2-devel
 %endif
+BuildRequires:	xorg-lib-libXpm-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	alsa-lib
 Requires:	eject
@@ -86,6 +88,7 @@ sterowanych przez pommeda.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__make}
