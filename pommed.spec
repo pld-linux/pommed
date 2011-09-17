@@ -15,6 +15,7 @@ Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.g
 Source1:	%{name}.init
 URL:		http://www.technologeek.org/projects/pommed/
 BuildRequires:	dbus-devel
+BuildRequires:	gettext-devel
 BuildRequires:	libconfuse-devel
 BuildRequires:	libsmbios-devel
 BuildRequires:	pciutils-devel
