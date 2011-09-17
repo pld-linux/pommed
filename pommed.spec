@@ -14,6 +14,7 @@ Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.g
 # Source0-md5:	1b54269bbadb6b43bd9e45566dd1b6ef
 Source1:	%{name}.init
 URL:		http://www.technologeek.org/projects/pommed/
+BuildRequires:	audiofile-devel
 BuildRequires:	dbus-devel
 BuildRequires:	gettext-devel
 BuildRequires:	libconfuse-devel
