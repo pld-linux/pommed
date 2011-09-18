@@ -6,15 +6,15 @@
 Summary:	pommed - Apple laptops hotkeys event handler
 Summary(pl.UTF-8):	pommed - obsługa zdarzeń klawiszy specjalnych w laptopach Apple'a
 Name:		pommed
-Version:	1.14
-Release:	0.5
+Version:	1.39
+Release:	1
 License:	GPL v2
 Group:		Applications
-Source0:	http://alioth.debian.org/frs/download.php/2223/%{name}-%{version}.tar.gz
-# Source0-md5:	1b54269bbadb6b43bd9e45566dd1b6ef
+Source0:	http://alioth.debian.org/frs/download.php/3583/%{name}-%{version}.tar.gz
+# Source0-md5:	f36757d180ed4f35fced6c096e1bcbeb
 Source1:	%{name}.init
-Patch0:		%{name}-libs.patch
 URL:		http://www.technologeek.org/projects/pommed/
+BuildRequires:	alsa-lib-devel
 BuildRequires:	audiofile-devel
 BuildRequires:	dbus-devel
 BuildRequires:	gettext-devel
@@ -88,7 +88,6 @@ sterowanych przez pommeda.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__make}
@@ -108,7 +107,6 @@ install -d $RPM_BUILD_ROOT{%{_datadir}/gpomme/themes,%{_desktopdir}}
 install gpomme/gpomme $RPM_BUILD_ROOT%{_bindir}
 cp -R gpomme/themes/* $RPM_BUILD_ROOT%{_datadir}/gpomme/themes
 install gpomme/gpomme*.desktop $RPM_BUILD_ROOT%{_desktopdir}
-install gpomme/gpomme.glade $RPM_BUILD_ROOT%{_datadir}/gpomme
 %endif
 install wmpomme/wmpomme $RPM_BUILD_ROOT%{_bindir}
 
