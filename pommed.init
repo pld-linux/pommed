@@ -17,7 +17,7 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/pommed ]; then
 		msg_starting pommed
-		daemon pommed
+		daemon /usr/sbin/pommed
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/pommed
 	else
