@@ -2,7 +2,7 @@
 #
 # Conditional build
 %bcond_without	gpomme	# don't build gpomme client
-#
+
 Summary:	pommed - Apple laptops hotkeys event handler
 Summary(pl.UTF-8):	pommed - obsługa zdarzeń klawiszy specjalnych w laptopach Apple'a
 Name:		pommed
@@ -13,7 +13,7 @@ Group:		Applications
 Source0:	http://alioth.debian.org/frs/download.php/3583/%{name}-%{version}.tar.gz
 # Source0-md5:	f36757d180ed4f35fced6c096e1bcbeb
 Source1:	%{name}.init
-URL:		http://www.technologeek.org/projects/pommed/
+URL:		https://launchpad.net/pommed
 BuildRequires:	alsa-lib-devel
 BuildRequires:	audiofile-devel
 BuildRequires:	dbus-devel
@@ -94,21 +94,20 @@ sterowanych przez pommeda.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_datadir}/%{name},%{_sysconfdir}/dbus-1/system.d}
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_datadir}/%{name},/etc/{dbus-1/system.d,rc.d/init.d}}
 
-install pommed/pommed $RPM_BUILD_ROOT%{_sbindir}
-install pommed/data/* $RPM_BUILD_ROOT%{_datadir}/%{name}
-install pommed.conf.{mactel,pmac} $RPM_BUILD_ROOT%{_sysconfdir}
-install dbus-policy.conf $RPM_BUILD_ROOT%{_sysconfdir}/dbus-1/system.d/pommed.conf
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/pommed
+install -p pommed/pommed $RPM_BUILD_ROOT%{_sbindir}
+cp -p pommed/data/* $RPM_BUILD_ROOT%{_datadir}/%{name}
+cp -p pommed.conf.{mactel,pmac} $RPM_BUILD_ROOT%{_sysconfdir}
+cp -p dbus-policy.conf $RPM_BUILD_ROOT%{_sysconfdir}/dbus-1/system.d/pommed.conf
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/pommed
 %if %{with gpomme}
 install -d $RPM_BUILD_ROOT{%{_datadir}/gpomme/themes,%{_desktopdir}}
-install gpomme/gpomme $RPM_BUILD_ROOT%{_bindir}
-cp -R gpomme/themes/* $RPM_BUILD_ROOT%{_datadir}/gpomme/themes
-install gpomme/gpomme*.desktop $RPM_BUILD_ROOT%{_desktopdir}
+install -p gpomme/gpomme $RPM_BUILD_ROOT%{_bindir}
+cp -a gpomme/themes/* $RPM_BUILD_ROOT%{_datadir}/gpomme/themes
+cp -p gpomme/gpomme*.desktop $RPM_BUILD_ROOT%{_desktopdir}
 %endif
-install wmpomme/wmpomme $RPM_BUILD_ROOT%{_bindir}
+install -p wmpomme/wmpomme $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -119,8 +118,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %preun
 if [ "$1" = "0" ]; then
-%service pommed stop
-/sbin/chkconfig --del %{name}
+	/sbin/chkconfig --del %{name}
+	%service pommed stop
 fi
 
 %files
@@ -129,8 +128,8 @@ fi
 %attr(755,root,root) %{_sbindir}/pommed
 %{_datadir}/%{name}
 %{_sysconfdir}/pommed.conf.*
-%{_sysconfdir}/dbus-1/system.d/pommed.conf
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/pommed
+/etc/dbus-1/system.d/pommed.conf
+%attr(754,root,root) /etc/rc.d/init.d/pommed
 
 %if %{with gpomme}
 %files -n gpomme
