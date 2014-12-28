@@ -17,7 +17,7 @@ URL:		https://launchpad.net/pommed
 BuildRequires:	alsa-lib-devel
 BuildRequires:	audiofile-devel
 BuildRequires:	dbus-devel
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	libconfuse-devel
 BuildRequires:	libsmbios-devel
 BuildRequires:	pciutils-devel
